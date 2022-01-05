@@ -1,0 +1,67 @@
+body {
+  font: 14px "Century Gothic", Tahoma, sans-serif;
+  margin: 20px;
+}
+
+.square {
+	background: #e8e8e4;
+	border: 1px solid #d8e2dc;
+  color: #b5838d;
+	float: left;
+  height: 34px;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.square-row {
+  clear: both;
+}
+
+.section1 {
+	float: left;
+	margin-right: 6px;
+	margin-bottom: 6px;
+}
+
+.section2 {
+	float: left;
+	margin-bottom: 6px;
+}
+.section3 {
+	float: left;
+}
+.section4 {
+	float: left;
+	margin-left: 6px;
+}
+
+.section-row {
+	clear: both;
+}
+
+.fill-option {
+	background: #ffe5d9;
+	border: 1px solid #fec89a;
+  color: #bc6c25;
+	float: left;
+  height: 34px;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  margin-right: 2px;
+  margin-top: 20px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.fill-options-nav {
+	clear: both;
+}
+/*color palette:  https://coolors.co/fec5bb-fcd5ce-fae1dd-f8edeb-e8e8e4-d8e2dc-ece4db-ffe5d9-ffd7ba-fec89a*/
