@@ -61,6 +61,10 @@ body {
   width: 34px;
 }
 
+.selected {
+	background: #fff;
+}
+
 .fill-options-nav {
 	clear: both;
 }

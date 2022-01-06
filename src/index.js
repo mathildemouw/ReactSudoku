@@ -3,28 +3,68 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			selected: "not-selected"
+		};
+	}
+
 	render() {
 		return (
-			<button className="square">
+			<button
+			className={"square " + this.state.selected}
+			onClick={() => this.select()}
+			>
 				{this.props.value}
 			</button>
 		)
+	}
+
+	select() {
+		this.setState({
+			selected: "selected",
+		});
+		// TODO let the board know i've been selected so it can handle seleection, unselect any other selected
+		// styling wise, do i add a class?
 	}
 }
 
 class FillOption extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			selected: "not-selected"
+		};
+	}
+
 	render() {
 		return (
-			<button className="fill-option">
+			<button className={"fill-option " + this.state.selected} onClick={() => this.select()}>
 				{this.props.value}
 			</button>
 		)
 	}
+
+	select() {
+		this.setState({
+			selected: "selected",
+		});
+		// TODO let the board know i've been selected so it can try to fill the square and do so if the number works
+	}
 }
 
 class Board extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			squares: Array(9).fill(1),
+			fillOptions: [1,2,3,4],
+		}
+	}
+
 	renderSquare(i) {
-		return <Square value={i} />;
+		return <Square value={this.state.squares[i]} />;
 	}
 
 	renderFillOption(i) {
