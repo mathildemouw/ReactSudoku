@@ -3,30 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			selected: "not-selected"
-		};
-	}
-
 	render() {
 		return (
 			<button
-			className={"square " + this.state.selected}
-			onClick={() => this.select()}
+			className={"square " + this.props.selected}
+			onClick={() => this.props.onClick()}
 			>
 				{this.props.value}
 			</button>
 		)
-	}
-
-	select() {
-		this.setState({
-			selected: "selected",
-		});
-		// TODO let the board know i've been selected so it can handle seleection, unselect any other selected
-		// styling wise, do i add a class?
 	}
 }
 
@@ -58,13 +43,34 @@ class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			squares: Array(9).fill(1),
+			squares: this.initialSquares(),
 			fillOptions: [1,2,3,4],
 		}
 	}
 
+	initialSquares() {
+		let squares = Array(16).fill(Object);
+		for(let i=0; i<16; i++){
+			console.log('i' + i)
+			squares[i].value=i.toString();
+		}
+		return squares;
+	}
+
+	handleClick(i) {
+		const squares = this.state.squares.slice();
+		squares[i].selected = 'selected'
+
+		this.setState({squares: squares})
+		console.log('click!')
+	}
+
 	renderSquare(i) {
-		return <Square value={this.state.squares[i]} />;
+		return <Square
+			value={this.state.squares[i].value}
+			selected={this.state.squares[i].selected}
+			onClick={() => this.handleClick(i)}
+		/>;
 	}
 
 	renderFillOption(i) {
@@ -78,26 +84,26 @@ class Board extends React.Component {
 				
 				<div className="section1">
 					<div className="square-row">
+						{this.renderSquare(0)}
 						{this.renderSquare(1)}
-						{this.renderSquare(2)}
 					</div>
 
 					<div className="square-row">
+						{this.renderSquare(2)}
 						{this.renderSquare(3)}
-						{this.renderSquare(4)}
 					</div>
 
 				</div>
 
 				<div className="section2">
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(4)}
+						{this.renderSquare(5)}
 					</div>
 
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(6)}
+						{this.renderSquare(7)}
 					</div>
 
 				</div>
@@ -108,26 +114,26 @@ class Board extends React.Component {
 				
 				<div className="section3">
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(8)}
+						{this.renderSquare(9)}
 					</div>
 
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(10)}
+						{this.renderSquare(11)}
 					</div>
 
 				</div>
 
 				<div className="section4">
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(12)}
+						{this.renderSquare(13)}
 					</div>
 
 					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(0)}
+						{this.renderSquare(14)}
+						{this.renderSquare(15)}
 					</div>
 
 				</div>
