@@ -49,11 +49,21 @@ class Board extends React.Component {
 	}
 
 	initialSquares() {
-		let squares = Array(16).fill(Object);
+		let squares =
+			[{},{},{},{},
+			{},{},{},{},
+			{},{},{},{},
+			{},{},{},{}]
+
+		let fillOptions = [1,2,3,4]
+
 		for(let i=0; i<16; i++){
-			console.log('i' + i)
-			squares[i].value=i.toString();
+			if (fillOptions.length == 0) {
+				fillOptions = [1,2,3,4]
+			}
+			squares[i].value = fillOptions.splice(Math.floor(Math.random() * fillOptions.length), 1)
 		}
+
 		return squares;
 	}
 
