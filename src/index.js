@@ -16,13 +16,6 @@ class Square extends React.Component {
 }
 
 class FillOption extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			selected: "not-selected"
-		};
-	}
-
 	render() {
 		return (
 			<button
@@ -35,33 +28,17 @@ class FillOption extends React.Component {
 	}
 }
 
-class Board extends React.Component {
+class PuzzleBoard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			squares: this.initialSquares(),
+			squares: this.props.initialSquares,
 			fillOptions: [
 			{value: 1, selected: 'not-selected'},
 			{value: 2, selected: 'not-selected'},
 			{value: 3, selected: 'not-selected'},
 			{value: 4, selected: 'not-selected'}],
 		}
-	}
-
-	initialSquares() {
-		let squares = [
-			{},{},{},{},
-			{},{},{},{},
-			{},{},{},{},
-			{},{},{},{}
-		]
-
-		this.firstQuadrantSolution(squares);
-		this.secondQuadrantSolution(squares);
-		this.thirdQuadrantSolution(squares);
-		this.fourthQuadrantSolution(squares);
-
-		return squares;
 	}
 
 	handleSquareClick(i) {
@@ -98,7 +75,124 @@ class Board extends React.Component {
 		return (
 		<div>
 			<div className="section-row">
-				
+
+				<div className="section1">
+					<div className="square-row">
+						{this.renderSquare(0)}
+						{this.renderSquare(1)}
+					</div>
+
+					<div className="square-row">
+						{this.renderSquare(2)}
+						{this.renderSquare(3)}
+					</div>
+
+				</div>
+
+				<div className="section2">
+					<div className="square-row">
+						{this.renderSquare(4)}
+						{this.renderSquare(5)}
+					</div>
+
+					<div className="square-row">
+						{this.renderSquare(6)}
+						{this.renderSquare(7)}
+					</div>
+
+				</div>
+
+			</div>
+
+			<div className="section-row">
+
+				<div className="section3">
+					<div className="square-row">
+						{this.renderSquare(8)}
+						{this.renderSquare(9)}
+					</div>
+
+					<div className="square-row">
+						{this.renderSquare(10)}
+						{this.renderSquare(11)}
+					</div>
+
+				</div>
+
+				<div className="section4">
+					<div className="square-row">
+						{this.renderSquare(12)}
+						{this.renderSquare(13)}
+					</div>
+
+					<div className="square-row">
+						{this.renderSquare(14)}
+						{this.renderSquare(15)}
+					</div>
+
+				</div>
+
+			</div>
+
+			<div className="fill-options-nav">
+				{this.renderFillOption(0)}
+				{this.renderFillOption(1)}
+				{this.renderFillOption(2)}
+				{this.renderFillOption(3)}
+			</div>
+		</div>
+		)
+	}
+}
+
+class SolutionBoard extends React.Component {
+		constructor(props) {
+		super(props);
+		this.state = {
+			squares: this.props.initialSquares,
+			fillOptions: [
+			{value: 1, selected: 'not-selected'},
+			{value: 2, selected: 'not-selected'},
+			{value: 3, selected: 'not-selected'},
+			{value: 4, selected: 'not-selected'}],
+		}
+	}
+
+	handleSquareClick(i) {
+		const squares = this.state.squares.slice();
+		squares[i].selected = 'selected';
+
+		this.setState({squares: squares})
+	}
+
+	handleFillOptionClick(i) {
+		const fillOptions = this.state.fillOptions.slice();
+		fillOptions[i].selected ='selected';
+
+		this.setState({fillOptions: fillOptions})
+	}
+
+	renderSquare(i) {
+		return <Square
+			value={this.state.squares[i].value}
+			selected={this.state.squares[i].selected}
+			onClick={() => this.handleSquareClick(i)}
+		/>;
+	}
+
+	renderFillOption(i) {
+		return <FillOption
+			value={this.state.fillOptions[i].value}
+			selected={this.state.fillOptions[i].selected}
+			onClick={() => this.handleFillOptionClick(i)}
+		/>;
+	}
+
+	render() {
+		return (
+		<div>
+			<div className="section-row">
+
 				<div className="section1">
 					<div className="square-row">
 						{this.renderSquare(0)}
@@ -166,7 +260,44 @@ class Board extends React.Component {
 		</div>
 		)
 	}
+}
 
+class Game extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			initialSquares: this.initialSquares(),
+		}
+	}
+
+	render () {
+		return(
+			<div className="game">
+				<div className="game-board">
+					<div className="section"><p>Puzzle:</p></div>
+					<PuzzleBoard initialSquares={this.state.initialSquares} />
+					<div className="section"><p>Solution:</p></div>
+					<SolutionBoard initialSquares={this.state.initialSquares} />
+				</div>
+			</div>
+		)
+	}
+
+	initialSquares() {
+		let squares = [
+			{},{},{},{},
+			{},{},{},{},
+			{},{},{},{},
+			{},{},{},{}
+		]
+
+		this.firstQuadrantSolution(squares);
+		this.secondQuadrantSolution(squares);
+		this.thirdQuadrantSolution(squares);
+		this.fourthQuadrantSolution(squares);
+
+		return squares;
+	}
 
 	firstQuadrantSolution(squares){
 		let fillOptions = [1,2,3,4]
@@ -237,7 +368,7 @@ class Board extends React.Component {
 		removeIndex = fillOptions.indexOf(squares[12].value)
 		fillOptions.splice(removeIndex, 1)
 
-		squares[13].value = [0]
+		squares[13].value = fillOptions[0]
 
 		fillOptions = [1,2,3,4]
 		removeIndex = fillOptions.indexOf(squares[4].value)
@@ -259,18 +390,7 @@ class Board extends React.Component {
 
 		squares[15].value = fillOptions[0]
 	}
-}
 
-class Game extends React.Component {
-	render () {
-		return(
-			<div className="game">
-				<div className="game-board">
-					<Board />
-				</div>
-			</div>
-		)
-	}
 }
 
 // ========================================
