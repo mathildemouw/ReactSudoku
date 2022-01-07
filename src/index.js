@@ -25,17 +25,13 @@ class FillOption extends React.Component {
 
 	render() {
 		return (
-			<button className={"fill-option " + this.state.selected} onClick={() => this.select()}>
+			<button
+				className={"fill-option " + this.props.selected}
+				onClick={() => this.props.onClick()}
+			>
 				{this.props.value}
 			</button>
 		)
-	}
-
-	select() {
-		this.setState({
-			selected: "selected",
-		});
-		// TODO let the board know i've been selected so it can try to fill the square and do so if the number works
 	}
 }
 
@@ -44,7 +40,11 @@ class Board extends React.Component {
 		super(props);
 		this.state = {
 			squares: this.initialSquares(),
-			fillOptions: [1,2,3,4],
+			fillOptions: [
+			{value: 1, selected: 'not-selected'},
+			{value: 2, selected: 'not-selected'},
+			{value: 3, selected: 'not-selected'},
+			{value: 4, selected: 'not-selected'}],
 		}
 	}
 
@@ -67,24 +67,34 @@ class Board extends React.Component {
 		return squares;
 	}
 
-	handleClick(i) {
+	handleSquareClick(i) {
 		const squares = this.state.squares.slice();
-		squares[i].selected = 'selected'
+		squares[i].selected = 'selected';
 
 		this.setState({squares: squares})
-		console.log('click!')
+	}
+
+	handleFillOptionClick(i) {
+		const fillOptions = this.state.fillOptions.slice();
+		fillOptions[i].selected ='selected';
+
+		this.setState({fillOptions: fillOptions})
 	}
 
 	renderSquare(i) {
 		return <Square
 			value={this.state.squares[i].value}
 			selected={this.state.squares[i].selected}
-			onClick={() => this.handleClick(i)}
+			onClick={() => this.handleSquareClick(i)}
 		/>;
 	}
 
 	renderFillOption(i) {
-		return <FillOption value={i} />
+		return <FillOption
+			value={this.state.fillOptions[i].value}
+			selected={this.state.fillOptions[i].selected}
+			onClick={() => this.handleFillOptionClick(i)}
+		/>;
 	}
 
 	render() {
@@ -151,10 +161,10 @@ class Board extends React.Component {
 			</div>
 
 			<div className="fill-options-nav">
+				{this.renderFillOption(0)}
 				{this.renderFillOption(1)}
 				{this.renderFillOption(2)}
 				{this.renderFillOption(3)}
-				{this.renderFillOption(4)}
 			</div>
 		</div>
 		)
