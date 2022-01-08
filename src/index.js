@@ -32,7 +32,7 @@ class PuzzleBoard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			squares: this.props.initialSquares,
+			puzzleSquares: this.puzzleSquares(),
 			fillOptions: [
 			{value: 1, selected: 'not-selected'},
 			{value: 2, selected: 'not-selected'},
@@ -41,11 +41,39 @@ class PuzzleBoard extends React.Component {
 		}
 	}
 
-	handleSquareClick(i) {
-		const squares = this.state.squares.slice();
-		squares[i].selected = 'selected';
+	puzzleSquares(){
+		let puzzleSquares = this.props.squares.slice();
+		this.removeMirrorPair(puzzleSquares);
+		return puzzleSquares
+	}
 
-		this.setState({squares: squares})
+	removeMirrorPair(puzzleSquares){
+		const mirrorPairArray = [[0, 15],
+		[1, 14],
+		[4, 11],
+		[5, 10],
+		[2, 13],
+		[3, 12],
+		[6,9],
+		[8,7]]
+
+		let pairIndex = Math.floor(Math.random() * mirrorPairArray.length)
+		puzzleSquares[mirrorPairArray[pairIndex][0]].value = null
+		puzzleSquares[mirrorPairArray[pairIndex][1]].value = null
+
+		// this.isSingleSolution(puzzleSquares);
+
+		return puzzleSquares;
+	}
+
+	isSingleSolution(puzzleSquares) {
+
+	}
+	handleSquareClick(i) {
+		const puzzleSquares = this.state.puzzleSquares.slice();
+		puzzleSquares[i].selected = 'selected';
+
+		this.setState({puzzleSquares: puzzleSquares})
 	}
 
 	handleFillOptionClick(i) {
@@ -57,8 +85,8 @@ class PuzzleBoard extends React.Component {
 
 	renderSquare(i) {
 		return <Square
-			value={this.state.squares[i].value}
-			selected={this.state.squares[i].selected}
+			value={this.state.puzzleSquares[i].value}
+			selected={this.state.puzzleSquares[i].selected}
 			onClick={() => this.handleSquareClick(i)}
 		/>;
 	}
@@ -149,7 +177,6 @@ class SolutionBoard extends React.Component {
 		constructor(props) {
 		super(props);
 		this.state = {
-			squares: this.props.initialSquares,
 			fillOptions: [
 			{value: 1, selected: 'not-selected'},
 			{value: 2, selected: 'not-selected'},
@@ -159,7 +186,7 @@ class SolutionBoard extends React.Component {
 	}
 
 	handleSquareClick(i) {
-		const squares = this.state.squares.slice();
+		const squares = this.props.squares.slice();
 		squares[i].selected = 'selected';
 
 		this.setState({squares: squares})
@@ -174,8 +201,8 @@ class SolutionBoard extends React.Component {
 
 	renderSquare(i) {
 		return <Square
-			value={this.state.squares[i].value}
-			selected={this.state.squares[i].selected}
+			value={this.props.squares[i].value}
+			selected={this.props.squares[i].selected}
 			onClick={() => this.handleSquareClick(i)}
 		/>;
 	}
@@ -265,8 +292,11 @@ class SolutionBoard extends React.Component {
 class Game extends React.Component {
 	constructor(props){
 		super(props);
+		const initialSquares = this.initialSquares();
+		const copyInitialSquare = JSON.parse(JSON.stringify(initialSquares));
 		this.state = {
-			initialSquares: this.initialSquares(),
+			initialSolutionSquares: initialSquares.slice(),
+			initialPuzzleSquares: copyInitialSquare.slice(),
 		}
 	}
 
@@ -275,9 +305,9 @@ class Game extends React.Component {
 			<div className="game">
 				<div className="game-board">
 					<div className="section"><p>Puzzle:</p></div>
-					<PuzzleBoard initialSquares={this.state.initialSquares} />
+					<PuzzleBoard squares={this.state.initialPuzzleSquares} />
 					<div className="section"><p>Solution:</p></div>
-					<SolutionBoard initialSquares={this.state.initialSquares} />
+					<SolutionBoard squares={this.state.initialSolutionSquares} />
 				</div>
 			</div>
 		)
