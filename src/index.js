@@ -31,8 +31,8 @@ class FillOption extends React.Component {
 class PuzzleBoard extends React.Component {
 	constructor(props) {
 		super(props);
+		this.makePuzzleSquares()
 		this.state = {
-			puzzleSquares: this.puzzleSquares(),
 			fillOptions: [
 			{value: 1, selected: 'not-selected'},
 			{value: 2, selected: 'not-selected'},
@@ -41,8 +41,8 @@ class PuzzleBoard extends React.Component {
 		}
 	}
 
-	puzzleSquares(){
-		let puzzleSquares = this.props.squares.slice();
+	makePuzzleSquares(){
+		let puzzleSquares = this.props.squares;
 		this.removeMirrorPair(puzzleSquares);
 		return puzzleSquares
 	}
@@ -61,16 +61,62 @@ class PuzzleBoard extends React.Component {
 		puzzleSquares[mirrorPairArray[pairIndex][0]].value = null
 		puzzleSquares[mirrorPairArray[pairIndex][1]].value = null
 
-		// this.isSingleSolution(puzzleSquares);
+		this.isSingleSolution(puzzleSquares);
 
-		return puzzleSquares;
+		// return puzzleSquares;
 	}
 
 	isSingleSolution(puzzleSquares) {
-
+		let checkSolutionSquares = JSON.parse(JSON.stringify(puzzleSquares))
+		for(let i = 0; i < checkSolutionSquares.length; i++){
+			if(checkSolutionSquares[i].value === null) {
+				//look at row
+				//look at column
+				this.compareColumn(checkSolutionSquares, i)
+				//look at quadrant
+				this.compareQuadrant(checkSolutionSquares, i)
+				console.log(checkSolutionSquares)
+				//TODO later: what to do if you have to guess to solve it
+			}
+		}
 	}
+
+	compareColumn(checkSolutionSquares, i){
+		let fillOptions = [1,2,3,4]
+		for(let j = 0; j < checkSolutionSquares.length; j++){
+			if(
+				//matches odd or even
+				((Math.floor(j/2) == j/2) == (Math.floor(i/2) == i/2)) &&
+				//matches %4 odd or even
+				(((Math.floor(Math.floor(j/4)/2)) == (Math.floor(j/4)/2)) ==
+								((Math.floor(Math.floor(i/4)/2)) == (Math.floor(i/4)/2)))
+			){
+				fillOptions.splice(fillOptions.indexOf(checkSolutionSquares[j].value),1)
+			}
+			if(fillOptions.length == 1){
+				checkSolutionSquares[i].value = fillOptions[0]
+				return fillOptions[0]
+			}
+		}
+	}
+
+	compareQuadrant(checkSolutionSquares, i){
+		let fillOptions = [1,2,3,4]
+		for(let j = 0; j < checkSolutionSquares.length; j++){
+			if(Math.floor(j/4) == Math.floor(i/4)){
+				if(fillOptions.indexOf(checkSolutionSquares[j].value) > -1){
+					fillOptions.splice(fillOptions.indexOf(checkSolutionSquares[j].value),1)
+				}
+			}
+			if(fillOptions.length == 1){
+				checkSolutionSquares[i].value = fillOptions[0]
+				return fillOptions[0]
+			}
+		}
+	}
+
 	handleSquareClick(i) {
-		const puzzleSquares = this.state.puzzleSquares.slice();
+		const puzzleSquares = this.props.squares.slice();
 		puzzleSquares[i].selected = 'selected';
 
 		this.setState({puzzleSquares: puzzleSquares})
@@ -85,8 +131,8 @@ class PuzzleBoard extends React.Component {
 
 	renderSquare(i) {
 		return <Square
-			value={this.state.puzzleSquares[i].value}
-			selected={this.state.puzzleSquares[i].selected}
+			value={this.props.squares[i].value}
+			selected={this.props.squares[i].selected}
 			onClick={() => this.handleSquareClick(i)}
 		/>;
 	}
@@ -325,6 +371,11 @@ class Game extends React.Component {
 		this.secondQuadrantSolution(squares);
 		this.thirdQuadrantSolution(squares);
 		this.fourthQuadrantSolution(squares);
+
+// TODO this doesn't always prevent some null suares from sneaking in
+		for(let i=0; i<squares.length; i++){
+			if(squares[i].value === null){this.initialSquares()}
+		}
 
 		return squares;
 	}
