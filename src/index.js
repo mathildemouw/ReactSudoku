@@ -44,7 +44,10 @@ class PuzzleBoard extends React.Component {
 	makePuzzleSquares(){
 		let puzzleSquares = this.props.squares;
 		this.removeMirrorPair(puzzleSquares);
-		this.isSingleSolution(puzzleSquares);
+		this.removeMirrorPair(puzzleSquares);
+		this.removeMirrorPair(puzzleSquares);
+		this.removeMirrorPair(puzzleSquares);
+		// this.isSingleSolution(puzzleSquares)
 		return puzzleSquares
 	}
 
