@@ -44,6 +44,7 @@ class PuzzleBoard extends React.Component {
 	makePuzzleSquares(){
 		let puzzleSquares = this.props.squares;
 		this.removeMirrorPair(puzzleSquares);
+		this.isSingleSolution(puzzleSquares);
 		return puzzleSquares
 	}
 
@@ -60,10 +61,6 @@ class PuzzleBoard extends React.Component {
 		let pairIndex = Math.floor(Math.random() * mirrorPairArray.length)
 		puzzleSquares[mirrorPairArray[pairIndex][0]].value = null
 		puzzleSquares[mirrorPairArray[pairIndex][1]].value = null
-
-		this.isSingleSolution(puzzleSquares);
-
-		// return puzzleSquares;
 	}
 
 	isSingleSolution(puzzleSquares) {
@@ -71,14 +68,65 @@ class PuzzleBoard extends React.Component {
 		for(let i = 0; i < checkSolutionSquares.length; i++){
 			if(checkSolutionSquares[i].value === null) {
 				//look at row
+				this.compareRow(checkSolutionSquares, i)
 				//look at column
-				this.compareColumn(checkSolutionSquares, i)
+				// this.compareColumn(checkSolutionSquares, i)
 				//look at quadrant
-				this.compareQuadrant(checkSolutionSquares, i)
+				// this.compareQuadrant(checkSolutionSquares, i)
 				console.log(checkSolutionSquares)
 				//TODO later: what to do if you have to guess to solve it
 			}
 		}
+	}
+
+	compareRow(checkSolutionSquares, i){
+		let fillOptions = [1,2,3,4]
+
+		let row1indices = [0,1,4,5]
+		let row2indices = [2,3, 6,7]
+		let row3indices = [8,9,12,13]
+		let row4indices = [10,11,14,15]
+		if(row1indices.includes(i)){
+			for(let j=0; j < row1indices.length; j++){
+				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row1indices[j]].value);
+				if(fillOptionsIndex > -1){
+					fillOptions.splice(fillOptionsIndex,1)
+				}
+			}
+			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+			fillOptions = [1,2,3,4]
+		}
+		if(row2indices.includes(i)){
+			for(let j=0; j < row2indices.length; j++){
+				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row2indices[j]].value);
+				if(fillOptionsIndex > -1){
+					fillOptions.splice(fillOptionsIndex,1)
+				}
+			}
+			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+			fillOptions = [1,2,3,4]
+		}
+		if(row3indices.includes(i)){
+			for(let j=0; j < row3indices.length; j++){
+				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row3indices[j]].value);
+				if(fillOptionsIndex > -1){
+					fillOptions.splice(fillOptionsIndex,1)
+				}
+			}
+			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+			fillOptions = [1,2,3,4]
+		}
+		if(row4indices.includes(i)){
+			for(let j=0; j < row4indices.length; j++){
+				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row4indices[j]].value);
+				if(fillOptionsIndex > -1){
+					fillOptions.splice(fillOptionsIndex,1)
+				}
+			}
+			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+			fillOptions = [1,2,3,4]
+		}
+
 	}
 
 	compareColumn(checkSolutionSquares, i){
@@ -319,16 +367,7 @@ class SolutionBoard extends React.Component {
 						{this.renderSquare(14)}
 						{this.renderSquare(15)}
 					</div>
-
 				</div>
-
-			</div>
-
-			<div className="fill-options-nav">
-				{this.renderFillOption(0)}
-				{this.renderFillOption(1)}
-				{this.renderFillOption(2)}
-				{this.renderFillOption(3)}
 			</div>
 		</div>
 		)
