@@ -38,6 +38,7 @@ class PuzzleBoard extends React.Component {
 			{value: 2, selected: 'not-selected'},
 			{value: 3, selected: 'not-selected'},
 			{value: 4, selected: 'not-selected'}],
+			selectedSquareIndex: null,
 		}
 	}
 
@@ -79,12 +80,13 @@ class PuzzleBoard extends React.Component {
 				this.compareColumns(checkSolutionSquares, i)
 				//look at quadrant
 				this.compareQuadrants(checkSolutionSquares, i)
-				if(fillOptions.includes(checkSolutionSquares[i].value)){unsolvedSquares -= 1}
+				if(checkSolutionSquares[i].value != null){unsolvedSquares -= 1}
 			}
 		}
 		return unsolvedSquares === 0;
 		//TODO later: what to do if you have to guess to solve it
 		// TODO: what to do if you have to cycle through more than once
+		//TODO: see that it fails when the puzzle can't be solved
 	}
 
 	compareRows(checkSolutionSquares, i){
@@ -154,19 +156,29 @@ class PuzzleBoard extends React.Component {
 	}
 
 	handleSquareClick(i) {
+		if(this.state.selectedSquareIndex != null){this.unSelectSquare(this.state.selectedSquareIndex)}
 		const puzzleSquares = this.props.squares.slice();
 		puzzleSquares[i].selected = 'selected';
+		this.state.selectedSquareIndex = i;
+
+		this.setState({puzzleSquares: puzzleSquares})
+	}
+
+	unSelectSquare(i) {
+		const puzzleSquares = this.props.squares.slice();
+		puzzleSquares[i].selected = 'unselected';
+		this.state.selectedSquareIndex = null;
 
 		this.setState({puzzleSquares: puzzleSquares})
 	}
 
 	handleFillOptionClick(i) {
 		const fillOptions = this.state.fillOptions.slice();
+		//TODO: do not select it unless a square is already selected
 		fillOptions[i].selected ='selected';
 
 		this.setState({fillOptions: fillOptions})
 	}
-
 	renderSquare(i) {
 		return <Square
 			value={this.props.squares[i].value}
@@ -276,26 +288,11 @@ class SolutionBoard extends React.Component {
 		this.setState({squares: squares})
 	}
 
-	handleFillOptionClick(i) {
-		const fillOptions = this.state.fillOptions.slice();
-		fillOptions[i].selected ='selected';
-
-		this.setState({fillOptions: fillOptions})
-	}
-
 	renderSquare(i) {
 		return <Square
 			value={this.props.squares[i].value}
 			selected={this.props.squares[i].selected}
 			onClick={() => this.handleSquareClick(i)}
-		/>;
-	}
-
-	renderFillOption(i) {
-		return <FillOption
-			value={this.state.fillOptions[i].value}
-			selected={this.state.fillOptions[i].selected}
-			onClick={() => this.handleFillOptionClick(i)}
 		/>;
 	}
 
@@ -401,7 +398,7 @@ class Game extends React.Component {
 		this.thirdQuadrantSolution(squares);
 		this.fourthQuadrantSolution(squares);
 
-// TODO this doesn't always prevent some null suares from sneaking in
+		// TODO: prevent null squares from sneaking in
 		for(let i=0; i<squares.length; i++){
 			if(squares[i].value === null){this.initialSquares()}
 		}
