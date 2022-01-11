@@ -65,21 +65,26 @@ class PuzzleBoard extends React.Component {
 
 	isSingleSolution(puzzleSquares) {
 		let checkSolutionSquares = JSON.parse(JSON.stringify(puzzleSquares))
+		let unsolvedSquares = 0
+		let fillOptions = [1,2,3,4]
 		for(let i = 0; i < checkSolutionSquares.length; i++){
 			if(checkSolutionSquares[i].value === null) {
+				unsolvedSquares += 1
 				//look at row
-				this.compareRow(checkSolutionSquares, i)
+				this.compareRows(checkSolutionSquares, i)
 				//look at column
-				// this.compareColumn(checkSolutionSquares, i)
+				this.compareColumns(checkSolutionSquares, i)
 				//look at quadrant
-				// this.compareQuadrant(checkSolutionSquares, i)
-				console.log(checkSolutionSquares)
-				//TODO later: what to do if you have to guess to solve it
+				this.compareQuadrants(checkSolutionSquares, i)
+				if(fillOptions.includes(checkSolutionSquares[i].value)){unsolvedSquares -= 1}
 			}
 		}
+		return unsolvedSquares === 0;
+		//TODO later: what to do if you have to guess to solve it
+		// TODO: what to do if you have to cycle through more than once
 	}
 
-	compareRow(checkSolutionSquares, i){
+	compareRows(checkSolutionSquares, i){
 		let fillOptions = [1,2,3,4]
 
 		let row1indices = [0,1,4,5]
@@ -87,49 +92,31 @@ class PuzzleBoard extends React.Component {
 		let row3indices = [8,9,12,13]
 		let row4indices = [10,11,14,15]
 		if(row1indices.includes(i)){
-			for(let j=0; j < row1indices.length; j++){
-				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row1indices[j]].value);
-				if(fillOptionsIndex > -1){
-					fillOptions.splice(fillOptionsIndex,1)
-				}
-			}
-			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
-			fillOptions = [1,2,3,4]
+			this.compareRow(checkSolutionSquares, i, row1indices, fillOptions);
 		}
 		if(row2indices.includes(i)){
-			for(let j=0; j < row2indices.length; j++){
-				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row2indices[j]].value);
-				if(fillOptionsIndex > -1){
-					fillOptions.splice(fillOptionsIndex,1)
-				}
-			}
-			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
-			fillOptions = [1,2,3,4]
+			this.compareRow(checkSolutionSquares, i, row2indices, fillOptions);
 		}
 		if(row3indices.includes(i)){
-			for(let j=0; j < row3indices.length; j++){
-				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row3indices[j]].value);
-				if(fillOptionsIndex > -1){
-					fillOptions.splice(fillOptionsIndex,1)
-				}
-			}
-			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
-			fillOptions = [1,2,3,4]
+			this.compareRow(checkSolutionSquares, i, row3indices, fillOptions);
 		}
 		if(row4indices.includes(i)){
-			for(let j=0; j < row4indices.length; j++){
-				const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[row4indices[j]].value);
-				if(fillOptionsIndex > -1){
-					fillOptions.splice(fillOptionsIndex,1)
-				}
-			}
-			if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
-			fillOptions = [1,2,3,4]
+			this.compareRow(checkSolutionSquares, i, row4indices, fillOptions);
 		}
-
 	}
 
-	compareColumn(checkSolutionSquares, i){
+	compareRow(checkSolutionSquares, i, rowindices, fillOptions){
+		for(let j=0; j < rowindices.length; j++){
+			const fillOptionsIndex = fillOptions.indexOf(checkSolutionSquares[rowindices[j]].value);
+			if(fillOptionsIndex > -1){
+				fillOptions.splice(fillOptionsIndex,1)
+			}
+		}
+		if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+		fillOptions = [1,2,3,4]
+	}
+
+	compareColumns(checkSolutionSquares, i){
 		let fillOptions = [1,2,3,4]
 		for(let j = 0; j < checkSolutionSquares.length; j++){
 			if(
@@ -148,7 +135,7 @@ class PuzzleBoard extends React.Component {
 		}
 	}
 
-	compareQuadrant(checkSolutionSquares, i){
+	compareQuadrants(checkSolutionSquares, i){
 		let fillOptions = [1,2,3,4]
 		for(let j = 0; j < checkSolutionSquares.length; j++){
 			if(Math.floor(j/4) == Math.floor(i/4)){
