@@ -5,7 +5,7 @@ import './index.css';
 function CountExample() {
   const [count, setCount] = useState(0);
 
-  useEffect(() => { document.title = `You clicked ${count} times`; }
+  useEffect(() => { document.title = `You clicked ${count} times`; }, [count]
   );
   return (
     <div>
