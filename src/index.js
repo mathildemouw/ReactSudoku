@@ -84,7 +84,6 @@ class PuzzleBoard extends React.Component {
 	isSingleSolution(puzzleSquares) {
 		let checkSolutionSquares = JSON.parse(JSON.stringify(puzzleSquares))
 		let unsolvedSquares = 0
-		let fillOptions = [1,2,3,4]
 		for(let i = 0; i < checkSolutionSquares.length; i++){
 			if(checkSolutionSquares[i].value === null) {
 				unsolvedSquares += 1
@@ -131,7 +130,7 @@ class PuzzleBoard extends React.Component {
 				fillOptions.splice(fillOptionsIndex,1)
 			}
 		}
-		if(fillOptions.length == 1){checkSolutionSquares[i].value = fillOptions[0]}
+		if(fillOptions.length === 1){checkSolutionSquares[i].value = fillOptions[0]}
 		fillOptions = [1,2,3,4]
 	}
 
@@ -140,14 +139,14 @@ class PuzzleBoard extends React.Component {
 		for(let j = 0; j < checkSolutionSquares.length; j++){
 			if(
 				//matches odd or even
-				((Math.floor(j/2) == j/2) == (Math.floor(i/2) == i/2)) &&
+				((Math.floor(j/2) === j/2) === (Math.floor(i/2) === i/2)) &&
 				//matches %4 odd or even
-				(((Math.floor(Math.floor(j/4)/2)) == (Math.floor(j/4)/2)) ==
-								((Math.floor(Math.floor(i/4)/2)) == (Math.floor(i/4)/2)))
+				(((Math.floor(Math.floor(j/4)/2)) === (Math.floor(j/4)/2)) ===
+								((Math.floor(Math.floor(i/4)/2)) === (Math.floor(i/4)/2)))
 			){
 				fillOptions.splice(fillOptions.indexOf(checkSolutionSquares[j].value),1)
 			}
-			if(fillOptions.length == 1){
+			if(fillOptions.length === 1){
 				checkSolutionSquares[i].value = fillOptions[0]
 				return fillOptions[0]
 			}
@@ -157,12 +156,12 @@ class PuzzleBoard extends React.Component {
 	compareQuadrants(checkSolutionSquares, i){
 		let fillOptions = [1,2,3,4]
 		for(let j = 0; j < checkSolutionSquares.length; j++){
-			if(Math.floor(j/4) == Math.floor(i/4)){
+			if(Math.floor(j/4) === Math.floor(i/4)){
 				if(fillOptions.indexOf(checkSolutionSquares[j].value) > -1){
 					fillOptions.splice(fillOptions.indexOf(checkSolutionSquares[j].value),1)
 				}
 			}
-			if(fillOptions.length == 1){
+			if(fillOptions.length === 1){
 				checkSolutionSquares[i].value = fillOptions[0]
 				return fillOptions[0]
 			}
@@ -173,9 +172,8 @@ class PuzzleBoard extends React.Component {
 		if(this.state.selectedSquareIndex != null){this.unSelectSquare(this.state.selectedSquareIndex)}
 		const puzzleSquares = this.props.squares.slice();
 		puzzleSquares[i].selected = 'selected';
-		this.state.selectedSquareIndex = i;
 
-		this.setState({puzzleSquares: puzzleSquares})
+		this.setState({selectedSquareIndex: i, puzzleSquares: puzzleSquares})
 	}
 
 	unSelectSquare(i) {
