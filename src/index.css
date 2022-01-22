@@ -1,6 +1,9 @@
 body {
   font: 14px "Century Gothic", Tahoma, sans-serif;
   margin: 20px;
+  display: grid;
+  place-items: center;
+  height: 100vh;
 }
 
 .square {

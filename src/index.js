@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'animate.css';
+
 
 function CountExample() {
   const [count, setCount] = useState(0);
@@ -33,7 +35,7 @@ class FillOption extends React.Component {
 	render() {
 		return (
 			<button
-				className={"fill-option " + this.props.selected}
+				className={"fill-option animate__animated animate__bounce " + this.props.selected}
 				onClick={() => this.props.onClick()}
 			>
 				{this.props.value}
@@ -179,9 +181,8 @@ class PuzzleBoard extends React.Component {
 	unSelectSquare(i) {
 		const puzzleSquares = this.props.squares.slice();
 		puzzleSquares[i].selected = 'unselected';
-		this.state.selectedSquareIndex = null;
 
-		this.setState({puzzleSquares: puzzleSquares})
+		this.setState({selectedSquareIndex: null, puzzleSquares: puzzleSquares})
 	}
 
 	handleFillOptionClick(i) {
