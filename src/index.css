@@ -22,6 +22,16 @@ body {
   width: 34px;
 }
 
+.correct {
+	background: #d8e2dc;
+  color: #83b584;
+}
+
+.incorrect {
+	background: #fec5bb;
+  color: #fe6c5d;
+}
+
 .square-row {
   clear: both;
 }

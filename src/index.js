@@ -22,7 +22,7 @@ class Square extends React.Component {
 	render() {
 		return (
 			<button
-			className={"square " + this.props.selected}
+			className={"square " + this.props.selected + " " + this.props.answerStatus}
 			onClick={() => this.props.onClick()}
 			>
 				{this.props.value}
@@ -55,6 +55,7 @@ class PuzzleBoard extends React.Component {
 			{value: 3, selected: 'not-selected'},
 			{value: 4, selected: 'not-selected'}],
 			selectedSquareIndex: null,
+			selectedFillOptionIndex: null,
 		}
 	}
 
@@ -171,9 +172,16 @@ class PuzzleBoard extends React.Component {
 	}
 
 	handleSquareClick(i) {
+		//unselect previous square
 		if(this.state.selectedSquareIndex != null){this.unSelectSquare(this.state.selectedSquareIndex)}
 		const puzzleSquares = this.props.squares.slice();
+		//mark square selected
 		puzzleSquares[i].selected = 'selected';
+
+		//if fillOption chosen and square is blank, attempt to fill
+		if (puzzleSquares[i].value == null){
+			this.attemptToFill(i)
+		}
 
 		this.setState({selectedSquareIndex: i, puzzleSquares: puzzleSquares})
 	}
@@ -185,17 +193,54 @@ class PuzzleBoard extends React.Component {
 		this.setState({selectedSquareIndex: null, puzzleSquares: puzzleSquares})
 	}
 
+	attemptToFill(puzzleSquareIndex){
+		const puzzleSquares = this.props.squares.slice();
+		//fill in with number
+		//find column, row, quadrant and check whether fill option is a possible option
+		// if it is, style as a possible correct
+		// if it isn't, style as incorrect
+		if (this.state.selectedFillOptionIndex != null) {
+			const fillValue = this.state.fillOptions[this.state.selectedFillOptionIndex].value
+			if(this.notInColumn(fillValue, puzzleSquareIndex) && this.notInRow(fillValue, puzzleSquareIndex) && this.notInQuadrant(fillValue, puzzleSquareIndex)){
+				puzzleSquares[puzzleSquareIndex].answerStatus = 'correct';
+			}else{puzzleSquares[puzzleSquareIndex].answerStatus = 'incorrect';}
+			puzzleSquares[puzzleSquareIndex].value = this.state.fillOptions[this.state.selectedFillOptionIndex].value
+		}
+	}
+
+	notInQuadrant(fillValue, puzzleSquareIndex){
+		return true
+	}
+
+	notInRow(fillValue, puzzleSquareIndex){
+		return true
+	}
+
+	notInColumn(fillValue, puzzleSquareIndex){
+		return true
+	}
+
 	handleFillOptionClick(i) {
+		if(this.state.selectedFillOptionIndex != null){this.unSelectFillOption(this.state.selectedFillOptionIndex)}
 		const fillOptions = this.state.fillOptions.slice();
-		//TODO: do not select it unless a square is already selected
+
 		fillOptions[i].selected ='selected';
 
-		this.setState({fillOptions: fillOptions})
+		this.setState({selectedFillOptionIndex: i, fillOptions: fillOptions})
 	}
+
+	unSelectFillOption(i) {
+		const fillOptions = this.state.fillOptions.slice();
+		fillOptions[i].selected = 'unselected';
+
+		this.setState({selectedFillOptionIndex: null, fillOptions: fillOptions})
+	}
+
 	renderSquare(i) {
 		return <Square
 			value={this.props.squares[i].value}
 			selected={this.props.squares[i].selected}
+			answerStatus={this.props.squares[i].answerStatus}
 			onClick={() => this.handleSquareClick(i)}
 		/>;
 	}
