@@ -85,4 +85,24 @@ body {
 .section{
 	clear: both;
 }
+
+.animation-example {
+	background: #ff7a18;
+  height: 250px;
+  width: 250px;
+}
+
+.animate {
+	/*<property> <duration> <timing-function> <delay>*/
+	transition: opacity 4s cubic-bezier(0.0, 0.0, 1.0, 1.0) 3s;
+}
+
+.animate:hover {
+	opacity: 50%;
+}
+
+@keyframe animate-fade {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
 /*color palette:  https://coolors.co/fec5bb-fcd5ce-fae1dd-f8edeb-e8e8e4-d8e2dc-ece4db-ffe5d9-ffd7ba-fec89a*/

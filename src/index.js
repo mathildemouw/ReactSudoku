@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'animate.css';
-
+import Square from './Square.jsx'
+import SolutionBoard from './SolutionBoard.jsx'
 
 function CountExample() {
   const [count, setCount] = useState(0);
@@ -16,19 +17,7 @@ function CountExample() {
         Click me
       </button>
     </div>
-  );}
-
-class Square extends React.Component {
-	render() {
-		return (
-			<button
-			className={"square " + this.props.selected + " " + this.props.answerStatus}
-			onClick={() => this.props.onClick()}
-			>
-				{this.props.value}
-			</button>
-		)
-	}
+  );
 }
 
 class FillOption extends React.Component {
@@ -196,7 +185,10 @@ class PuzzleBoard extends React.Component {
 	attemptToFill(puzzleSquareIndex){
 		const puzzleSquares = this.props.squares.slice();
 		if (this.state.selectedFillOptionIndex != null) {
-			if(this.notInColumn(puzzleSquareIndex) && this.notInRow(puzzleSquareIndex) && this.notInQuadrant(puzzleSquareIndex)){
+			if(
+				this.notInColumn(puzzleSquareIndex) &&
+				this.notInRow(puzzleSquareIndex) &&
+				this.notInQuadrant(puzzleSquareIndex)){
 				puzzleSquares[puzzleSquareIndex].answerStatus = 'correct';
 			} else { puzzleSquares[puzzleSquareIndex].answerStatus = 'incorrect'; }
 			puzzleSquares[puzzleSquareIndex].value = this.state.fillOptions[this.state.selectedFillOptionIndex].value
@@ -372,98 +364,6 @@ class PuzzleBoard extends React.Component {
 				{this.renderFillOption(1)}
 				{this.renderFillOption(2)}
 				{this.renderFillOption(3)}
-			</div>
-		</div>
-		)
-	}
-}
-
-class SolutionBoard extends React.Component {
-		constructor(props) {
-		super(props);
-		this.state = {
-			fillOptions: [
-			{value: 1, selected: 'not-selected'},
-			{value: 2, selected: 'not-selected'},
-			{value: 3, selected: 'not-selected'},
-			{value: 4, selected: 'not-selected'}],
-		}
-	}
-
-	handleSquareClick(i) {
-		const squares = this.props.squares.slice();
-		squares[i].selected = 'selected';
-
-		this.setState({squares: squares})
-	}
-
-	renderSquare(i) {
-		return <Square
-			value={this.props.squares[i].value}
-			selected={this.props.squares[i].selected}
-			onClick={() => this.handleSquareClick(i)}
-		/>;
-	}
-
-	render() {
-		return (
-		<div>
-			<div className="section-row">
-
-				<div className="section1">
-					<div className="square-row">
-						{this.renderSquare(0)}
-						{this.renderSquare(1)}
-					</div>
-
-					<div className="square-row">
-						{this.renderSquare(2)}
-						{this.renderSquare(3)}
-					</div>
-
-				</div>
-
-				<div className="section2">
-					<div className="square-row">
-						{this.renderSquare(4)}
-						{this.renderSquare(5)}
-					</div>
-
-					<div className="square-row">
-						{this.renderSquare(6)}
-						{this.renderSquare(7)}
-					</div>
-
-				</div>
-
-			</div>
-
-			<div className="section-row">
-				
-				<div className="section3">
-					<div className="square-row">
-						{this.renderSquare(8)}
-						{this.renderSquare(9)}
-					</div>
-
-					<div className="square-row">
-						{this.renderSquare(10)}
-						{this.renderSquare(11)}
-					</div>
-
-				</div>
-
-				<div className="section4">
-					<div className="square-row">
-						{this.renderSquare(12)}
-						{this.renderSquare(13)}
-					</div>
-
-					<div className="square-row">
-						{this.renderSquare(14)}
-						{this.renderSquare(15)}
-					</div>
-				</div>
 			</div>
 		</div>
 		)
