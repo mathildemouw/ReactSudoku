@@ -195,33 +195,84 @@ class PuzzleBoard extends React.Component {
 
 	attemptToFill(puzzleSquareIndex){
 		const puzzleSquares = this.props.squares.slice();
-		//fill in with number
-		//find column, row, quadrant and check whether fill option is a possible option
-		// if it is, style as a possible correct
-		// if it isn't, style as incorrect
 		if (this.state.selectedFillOptionIndex != null) {
-			const fillValue = this.state.fillOptions[this.state.selectedFillOptionIndex].value
-			if(this.notInColumn(fillValue, puzzleSquareIndex) && this.notInRow(fillValue, puzzleSquareIndex) && this.notInQuadrant(fillValue, puzzleSquareIndex)){
+			if(this.notInColumn(puzzleSquareIndex) && this.notInRow(puzzleSquareIndex) && this.notInQuadrant(puzzleSquareIndex)){
 				puzzleSquares[puzzleSquareIndex].answerStatus = 'correct';
-			}else{puzzleSquares[puzzleSquareIndex].answerStatus = 'incorrect';}
+			} else { puzzleSquares[puzzleSquareIndex].answerStatus = 'incorrect'; }
 			puzzleSquares[puzzleSquareIndex].value = this.state.fillOptions[this.state.selectedFillOptionIndex].value
 		}
 	}
 
-	notInQuadrant(fillValue, puzzleSquareIndex){
-		return true
+	notInQuadrant(puzzleSquareIndex){
+		let quadrant1indices = [0,1,2,3]
+		let quadrant2indices = [4,5, 6,7]
+		let quadrant3indices = [8,9,10,11]
+		let quadrant4indices = [12,13,14,15]
+
+		const fillValue = this.state.fillOptions[this.state.selectedFillOptionIndex].value
+
+		if(quadrant1indices.includes(puzzleSquareIndex)){
+			return !quadrant1indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(quadrant2indices.includes(puzzleSquareIndex)){
+			return !quadrant2indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(quadrant3indices.includes(puzzleSquareIndex)){
+			return !quadrant3indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(quadrant4indices.includes(puzzleSquareIndex)){
+			return !quadrant4indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
 	}
 
-	notInRow(fillValue, puzzleSquareIndex){
-		return true
+	notInRow(puzzleSquareIndex){
+		let row1indices = [0,1,4,5]
+		let row2indices = [2,3, 6,7]
+		let row3indices = [8,9,12,13]
+		let row4indices = [10,11,14,15]
+
+		const fillValue = this.state.fillOptions[this.state.selectedFillOptionIndex].value
+
+		if(row1indices.includes(puzzleSquareIndex)){
+			return !row1indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(row2indices.includes(puzzleSquareIndex)){
+			return !row2indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(row3indices.includes(puzzleSquareIndex)){
+			return !row3indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(row4indices.includes(puzzleSquareIndex)){
+			return !row4indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
 	}
 
-	notInColumn(fillValue, puzzleSquareIndex){
-		return true
+	notInColumn(puzzleSquareIndex){
+		let column1indices = [0,1,2,3]
+		let column2indices = [4,5, 6,7]
+		let column3indices = [8,9,10,11]
+		let column4indices = [12,13,14,15]
+
+		const fillValue = this.state.fillOptions[this.state.selectedFillOptionIndex].value
+
+		if(column1indices.includes(puzzleSquareIndex)){
+			return !column1indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(column2indices.includes(puzzleSquareIndex)){
+			return !column2indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(column3indices.includes(puzzleSquareIndex)){
+			return !column3indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
+		if(column4indices.includes(puzzleSquareIndex)){
+			return !column4indices.map((e)=>{return this.props.squares[e].value;}).includes(fillValue)
+		}
 	}
 
 	handleFillOptionClick(i) {
-		if(this.state.selectedFillOptionIndex != null){this.unSelectFillOption(this.state.selectedFillOptionIndex)}
+		if(this.state.selectedFillOptionIndex != null){
+			this.unSelectFillOption(this.state.selectedFillOptionIndex)
+		}
 		const fillOptions = this.state.fillOptions.slice();
 
 		fillOptions[i].selected ='selected';
