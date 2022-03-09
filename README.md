@@ -1,6 +1,11 @@
-# Getting Started with Create React App
+# Sudoku In React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is an interactive sudoku puzzle.
+
+<img width="187" alt="Screen Shot 2022-03-09 at 10 44 51 AM" src="https://user-images.githubusercontent.com/5192370/157509914-f89fdafe-aa4b-4244-b2c6-db40a3768dd8.png">
+
+
+It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
